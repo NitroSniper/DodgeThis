@@ -5,13 +5,14 @@ DEFAULT_LIVES = 3
 DEFAULT_ANGLE = 3
 
 # https://stackoverflow.com/questions/67168804/how-to-make-a-circular-countdown-timer-in-pygame
+# https://stackoverflow.com/questions/3436453/calculate-coordinates-of-a-regular-polygons-vertices
 
 class PlayerObject(object):
     def __init__(self, moveSetKey, dashKey, image, position):
         self.image = pygame.image.load(
             f'Images\{image}.png').convert_alpha()
         self.size = (self.image.get_width(), self.image.get_height())
-        
+        print (self.size)
         self.moveSet = moveSetKey
 
         self.position = list(position)
@@ -41,3 +42,14 @@ class PlayerObject(object):
                 self.position[0] += self.speed*dt
     def customize(self):
         pass
+
+
+
+
+
+
+
+
+
+def DrawShape(pointsNum, size): #
+    
