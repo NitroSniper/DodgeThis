@@ -1,9 +1,9 @@
 
-
-from math import sin, cos, degrees, radians, floor
-from time import time
+from math import sin, cos, pi, radians
+from time import perf_counter
 import pygame
-
+from pygame import gfxdraw
+from inspect import getfullargspec
 
 def Collision(playerInfo, ListofBulletInfo):
     Collide, NearHit = False, False
@@ -27,24 +27,7 @@ def RotationBlit(Surface, Image, Position, Angle=0, Alpha=255):
 
 
 def TimeIt(duration, start, compensation=0):
-    return time() - (start+compensation) > duration
-
-
-# def TrigVectors(angle, velocity, position, dt=1):
-#     rounds = floor(angle/90) % 4
-#     rad = radians(angle % 90)
-#     sinResult = sin(rad)*velocity*dt
-#     cosResult = cos(rad)*velocity*dt
-#     if AXISTUPLE[rounds][0]:
-#         position[0] += sinResult*AXISTUPLE[rounds][1][0]
-#         position[1] -= cosResult*AXISTUPLE[rounds][1][1]
-#     else:
-#         position[1] += sinResult*AXISTUPLE[rounds][1][0]
-#         position[0] -= cosResult*AXISTUPLE[rounds][1][1]
-#     return position
-
-# AXISTUPLE = ((True, (1, 1)), (False, (1, -1)),
-#              (True, (-1, -1)), (False, (-1, 1)))
+    return perf_counter() - (start+compensation) > duration
 
 def TrigVectors(angle, velocity, position, dt=1):
     rad = radians(angle)
@@ -61,10 +44,23 @@ def RotPosition(Image, Angle, Position):
 def clamp(n, minn, maxn):
     return max(min(maxn, n), minn)
 #
-
+hello = 'something'
 
 
 def OutOfBounds(SCREEN_SIZE, PlayerObject, PlayerRect):
     PlayerObject.position = [clamp(PlayerObject.position[0], 0, SCREEN_SIZE[0]), clamp(PlayerObject.position[1], 0, SCREEN_SIZE[1])]
     return PlayerObject
 
+def GFXDrawShape(numPoints, radius, color, angleOffset=0,alpha=255): #
+    # print (numPoints, radius, angleOffset)
+    surf = pygame.Surface((2*(radius), 2*(radius)), pygame.SRCALPHA)
+    angle = 2 * pi / numPoints
+    vertices = []
+    for i in range(numPoints):
+        vertices.append((radius + radius * sin(i * angle + radians(angleOffset)), radius + radius * cos(i * angle + radians(angleOffset))))
+    gfxdraw.aapolygon(surf, vertices, color + (alpha,))
+    gfxdraw.filled_polygon(surf, vertices, color + (alpha,))
+    return surf
+
+def getVarName(func):
+    return getfullargspec(func).args
